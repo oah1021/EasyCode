@@ -9,6 +9,7 @@ import com.intellij.ui.components.JBList;
 import com.sjhy.plugin.entity.AbstractEditorItem;
 import com.sjhy.plugin.factory.AbstractItemFactory;
 import com.sjhy.plugin.tool.CollectionUtil;
+import com.sjhy.plugin.tool.MessageDialogUtils;
 import com.sjhy.plugin.tool.StringUtils;
 import com.sjhy.plugin.ui.base.InputExistsValidator;
 import lombok.Getter;
@@ -117,8 +118,11 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
         return new AnAction(AllIcons.General.Remove) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                elementList.removeIf(item -> Objects.equals(item.fileName(), jbList.getSelectedValue()));
-                switchItemFun.accept(elementList.stream().findFirst().orElse(null));
+                boolean result = MessageDialogUtils.yesNo("确认要删除该模板吗？");
+                if (result) {
+                    elementList.removeIf(item -> Objects.equals(item.fileName(), jbList.getSelectedValue()));
+                    switchItemFun.accept(elementList.stream().findFirst().orElse(null));
+                }
             }
 
             @Override

@@ -8,6 +8,7 @@ import com.intellij.ui.components.JBLabel;
 import com.sjhy.plugin.dict.GlobalDict;
 import com.sjhy.plugin.entity.AbstractGroup;
 import com.sjhy.plugin.entity.AbstractItem;
+import com.sjhy.plugin.tool.MessageDialogUtils;
 import com.sjhy.plugin.tool.StringUtils;
 import com.sjhy.plugin.ui.base.InputExistsValidator;
 import lombok.Getter;
@@ -106,9 +107,12 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
         return new AnAction(AllIcons.General.Remove) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                groupMap.remove(currGroupName);
-                // 切换分组
-                switchGroupConsumer.accept(groupMap.get(GlobalDict.DEFAULT_GROUP_NAME));
+                boolean result = MessageDialogUtils.yesNo("确认要删除该分组吗？");
+                if (result) {
+                    groupMap.remove(currGroupName);
+                    // 切换分组
+                    switchGroupConsumer.accept(groupMap.get(GlobalDict.DEFAULT_GROUP_NAME));
+                }
             }
 
             @Override
