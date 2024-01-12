@@ -1,6 +1,7 @@
 package com.sjhy.plugin.tool;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.util.ui.UIUtil;
 import com.sjhy.plugin.dict.GlobalDict;
 
@@ -58,4 +59,22 @@ public class MessageDialogUtils {
                 options, options[0]);
     }
 
+    /**
+     * 弹出消息提示框
+     * @param title 提示框的标题
+     * @param msg 显示的消息内容
+     */
+    public static void showMessageBox(String title, String msg) {
+        Messages.showMessageDialog(msg, title, Messages.getInformationIcon());
+    }
+
+    /**
+     * 弹出消息提示框
+     * @param title 提示框的标题
+     * @param msg 显示的消息内容
+     * @param icon 对话框的图标类型
+     */
+    public static void showMessageBox(String title, String msg, Icon icon) {
+        Messages.showMessageDialog(msg, title, icon);
+    }
 }
