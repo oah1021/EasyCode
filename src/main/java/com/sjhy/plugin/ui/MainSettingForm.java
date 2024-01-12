@@ -24,6 +24,9 @@ import java.util.Objects;
  */
 public class MainSettingForm implements Configurable, Configurable.Composite, BaseSettings {
     private JLabel versionLabel;
+    /**
+     * 重置默认设置
+     */
     private JButton resetBtn;
     private JButton pushBtn;
     private JButton pullBtn;
@@ -35,6 +38,9 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
     private JButton importByClipboardBtn;
     private JPanel mainPanel;
     private JTextField userSecureEditor;
+    /**
+     * 作者名称输入框
+     */
     private JTextField authorEditor;
     private JLabel userSecureLabel;
     private JLabel userSecureTitle;

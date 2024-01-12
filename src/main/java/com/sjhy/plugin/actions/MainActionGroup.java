@@ -99,6 +99,7 @@ public class MainActionGroup extends ActionGroup {
     private AnAction[] getMenuList() {
         String mainActionId = "com.sjhy.easy.code.action.generate";
         String configActionId = "com.sjhy.easy.code.action.config";
+        // 用于注册和删除菜单
         ActionManager actionManager = ActionManager.getInstance();
         // 代码生成菜单
         AnAction mainAction = actionManager.getAction(mainActionId);

@@ -80,6 +80,9 @@ public class TemplateSettingForm implements Configurable, BaseSettings {
         this.mainPanel.add(groupNameComponent.getPanel(), BorderLayout.NORTH);
     }
 
+    /**
+     * 初始化编辑列表组件
+     */
     private void initEditList() {
         Consumer<Template> switchItemFun = template -> {
             refreshUiVal();
