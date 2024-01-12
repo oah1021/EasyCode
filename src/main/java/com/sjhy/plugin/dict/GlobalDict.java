@@ -19,7 +19,7 @@ public interface GlobalDict {
     /**
      * 作者名称
      */
-    String AUTHOR = "makejava";
+    String AUTHOR = "JUNHAO";
     /**
      * 默认分组名称
      */
