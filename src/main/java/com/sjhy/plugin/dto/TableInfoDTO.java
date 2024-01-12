@@ -12,10 +12,8 @@ import com.sjhy.plugin.tool.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.naming.ConfigurationException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +26,39 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 public class TableInfoDTO {
+
+    /**
+     * 表名（首字母大写）
+     */
+    private String name;
+    /**
+     * 表名前缀
+     */
+    private String preName;
+    /**
+     * 注释
+     */
+    private String comment;
+    /**
+     * 模板组名称
+     */
+    private String templateGroupName;
+    /**
+     * 所有列
+     */
+    private List<ColumnInfoDTO> fullColumn;
+    /**
+     * 保存的包名称
+     */
+    private String savePackageName;
+    /**
+     * 保存路径
+     */
+    private String savePath;
+    /**
+     * 保存的model名称
+     */
+    private String saveModelName;
 
     public TableInfoDTO(TableInfoDTO dto, DbTable dbTable) {
         this(dbTable);
@@ -123,8 +154,15 @@ public class TableInfoDTO {
                 }
             }
         });
+        // 是否存在相同字段
+        List<ColumnInfoDTO> oldDataFullColumn = oldData.getFullColumn();
+        Set<String> columnName = oldDataFullColumn.stream().map(ColumnInfoDTO::getName).collect(Collectors.toSet());
+        if (columnName.size() < oldData.getFullColumn().size()) {
+            MessageDialogUtils.showMessageBox("警告", "存在相同的字段名！");
+            return;
+        }
         // 按顺序依次重写数据
-        Map<String, ColumnInfoDTO> oldColumnMap = oldData.getFullColumn().stream().collect(Collectors.toMap(ColumnInfoDTO::getName, v -> v));
+        Map<String, ColumnInfoDTO> oldColumnMap = oldDataFullColumn.stream().collect(Collectors.toMap(ColumnInfoDTO::getName, v -> v));
         Map<String, ColumnInfoDTO> newColumnMap = newData.getFullColumn().stream().collect(Collectors.toMap(ColumnInfoDTO::getName, v -> v));
         List<ColumnInfoDTO> tmpList = new ArrayList<>();
         for (String name : allNewColumnNames) {
@@ -154,39 +192,6 @@ public class TableInfoDTO {
         newData.getFullColumn().addAll(tmpList);
     }
 
-
-    /**
-     * 表名（首字母大写）
-     */
-    private String name;
-    /**
-     * 表名前缀
-     */
-    private String preName;
-    /**
-     * 注释
-     */
-    private String comment;
-    /**
-     * 模板组名称
-     */
-    private String templateGroupName;
-    /**
-     * 所有列
-     */
-    private List<ColumnInfoDTO> fullColumn;
-    /**
-     * 保存的包名称
-     */
-    private String savePackageName;
-    /**
-     * 保存路径
-     */
-    private String savePath;
-    /**
-     * 保存的model名称
-     */
-    private String saveModelName;
 
     public TableInfo toTableInfo(PsiClass psiClass) {
         TableInfo tableInfo = new TableInfo();
