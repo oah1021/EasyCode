@@ -63,7 +63,7 @@ intellij {
 
 dependencies {
     // jackson工具
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
     // guava工具
 //    compile 'com.google.guava:guava:29.0-jre'
     // velocity支持
@@ -79,6 +79,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
     // 测试用例
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
