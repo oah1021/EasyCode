@@ -13,6 +13,7 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiModifier;
 import com.sjhy.plugin.tool.CacheDataUtils;
+import com.sjhy.plugin.tool.ClassUtils;
 import com.sjhy.plugin.ui.SelectSavePath;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,7 +53,7 @@ public class EasyCodeEntityAction extends AnAction {
         }
 
         // 获取选中的类
-        List<PsiClass> psiClassList = resolvePsiClassByFile(psiJavaFiles);
+        List<PsiClass> psiClassList = ClassUtils.resolvePsiClassByFile(psiJavaFiles);
         if (psiClassList.size() == 0) {
             return;
         }
@@ -63,18 +64,6 @@ public class EasyCodeEntityAction extends AnAction {
         new SelectSavePath(project, true).show();
     }
 
-    /**
-     * 解析类
-     */
-    private List<PsiClass> resolvePsiClassByFile(List<PsiJavaFile> psiJavaFiles) {
-        List<PsiClass> psiClassList = Lists.newArrayListWithCapacity(psiJavaFiles.size());
-        for (PsiJavaFile psiJavaFile : psiJavaFiles) {
-            Arrays.stream(psiJavaFile.getClasses())
-                    .filter(o -> o.getModifierList() != null && o.getModifierList().hasModifierProperty(PsiModifier.PUBLIC))
-                    .findFirst().ifPresent(psiClassList::add);
-        }
-        return psiClassList;
-    }
 
     @Override
     public void update(@NotNull AnActionEvent event) {
