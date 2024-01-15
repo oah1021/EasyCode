@@ -1,6 +1,8 @@
 buildscript {
     repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
         mavenCentral()
+        google()
         maven { url "https://maven.aliyun.com/repository/central" }
         maven { url "https://maven.aliyun.com/repository/google" }
         maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
@@ -12,7 +14,6 @@ buildscript {
         maven { url "https://maven.aliyun.com/repository/snapshots" }
         maven { url "https://maven.aliyun.com/repository/grails-core" }
         maven { url "https://maven.aliyun.com/repository/mapr-public" }
-        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
         maven { url 'https://plugins.gradle.org/m2/' }
         maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
     }
@@ -22,7 +23,10 @@ buildscript {
 // 这两个插件是必备
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.7.3'
+    // 现在的核心版本：https://lp.jetbrains.com/gradle-intellij-plugin/
+    // 如何从 0.x 升级到 1.x
+    id 'org.jetbrains.intellij' version '1.15.0'
+    id 'org.jetbrains.changelog' version "2.2.0"
 }
 
 
@@ -30,8 +34,8 @@ group 'com.sjhy'
 version '1.2.8-java.RELEASE'
 
 // 限制jdk的使用版本号，这里限制到8，表示生成的idea插件只能运行在jdk8以上的环境中
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
@@ -39,30 +43,44 @@ repositories {
     mavenCentral()
 }
 
-// http://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/prerequisites.html
-// https://plugins.jetbrains.com/docs/intellij/gradle-guide.html  官网gradle构建教程
+// 官方sdk插件开发教程 http://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/prerequisites.html
+// 官网gradle构建教程 https://plugins.jetbrains.com/docs/intellij/gradle-guide.html
 
 intellij {
 //    插件名称
-    pluginName 'EasyCode'
-    // 沙箱目录位置，用于保存IDEA的设置，默认在build文件下面，防止clean，放在根目录下。
-    sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
+//    pluginName("EasyCode")
+    setPluginName("EasyCode")
+//    pluginName 'EasyCode'
     // 开发环境运行时使用的版本
-    version '2021.2.3'
+    setVersion('2022.3.3')
     // 社区版
 //    type 'IC'
     // 企业版
-    type 'IU'
+    type.set('IU')
+//    setType('IU')
     // 各种IDEA版本去这里找
     // https://www.jetbrains.com/intellij-repository/releases
     // 依赖的插件
-    plugins = ['com.intellij.java', 'com.intellij.database']
-    //Disables updating since-build attribute in plugin.xml
-    updateSinceUntilBuild false
-    downloadSources = true
+
+    plugins = [
+            'com.intellij.java',
+            'com.intellij.database',
+            "org.intellij.intelliLang",
+//            "org.jetbrains.kotlin",
+            "com.intellij.properties"]
+    // Disables updating since-build attribute in plugin.xml
+    updateSinceUntilBuild.set(false)
+    downloadSources.set(true)
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.springframework/spring-expression
+    implementation "org.springframework:spring-expression:5.3.24"
+    implementation("org.reflections:reflections:0.10.2") {
+        // https://cloud.tencent.com/developer/ask/sof/107326615
+        exclude(group : "org.slf4j")
+    }
+    testCompileOnly("com.alibaba:fastjson:1.2.83")
     // jackson工具
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
     // guava工具
@@ -76,9 +94,9 @@ dependencies {
     // freemarker支持
 //    compile 'org.freemarker:freemarker:2.3.30'
     // lombok 支持
-    compileOnly 'org.projectlombok:lombok:1.18.2'
-    annotationProcessor 'org.projectlombok:lombok:1.18.2'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
     // 测试用例
     testImplementation 'junit:junit:4.12'
 }

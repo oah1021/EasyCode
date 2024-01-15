@@ -1,12 +1,29 @@
 <idea-plugin>
 
+    <!--
+        first：将操作添加到操作组的开头位置。
+        last：将操作添加到操作组的末尾位置。
+        before：将操作添加到指定操作之前的位置。你需要通过 relative-to 属性指定要放在哪个操作之前。
+        after：将操作添加到指定操作之后的位置。你需要通过 relative-to 属性指定要放在哪个操作之后。
+    -->
+
     <actions>
+        <!-- 一级目录菜单 -->
+        <!-- id:唯一标识符，可被引用 class: 实现类 text: 显示在菜单的文本 popub: 是否为弹出式菜单 -->
+        <group id="com.sjhy.plugin.menu.parent" text="EasyCode"
+               popup="true">
+            <!--生成代码菜单-->
+            <!--将菜单添加到目标菜单组(ProjectViewPopupMenu(项目视图的上下文菜单操作组))，并且指定位置(last)-->
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </group>
+
         <!-- 实体类生成代码 -->
         <action id="com.sjhy.plugin.actions.EasyCodeEntityAction"
-                class="com.sjhy.plugin.actions.EasyCodeEntityAction" text="EasyCode...">
-            <add-to-group group-id="GenerateGroup" anchor="last"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+                class="com.sjhy.plugin.actions.EasyCodeEntityAction" text="实体类生成代码">
+            <!-- <add-to-group group-id="GenerateGroup" anchor="last"/> -->
+            <add-to-group group-id="com.sjhy.plugin.menu.parent" anchor="last"/>
         </action>
+
     </actions>
 
 </idea-plugin>
